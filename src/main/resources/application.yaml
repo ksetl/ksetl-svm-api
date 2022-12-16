@@ -1,0 +1,22 @@
+quarkus:
+  banner:
+    enabled: false
+  hibernate-orm:
+    database:
+      generation: none
+
+mp:
+  openapi:
+    extensions:
+      smallrye:
+        info:
+          title: System Value Mapping API
+          version: 0.0.1
+          description: API for retrieving system value mappings
+          contact:
+            email: techsupport@ksetl.org
+            name: System Value Mapping API Support
+            url: https://github.com/ksetl/ksetl-svm-api
+          license:
+            name: Apache 2.0
+            url: http://www.apache.org/licenses/LICENSE-2.0.html

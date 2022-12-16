@@ -1,0 +1,12 @@
+quarkus:
+  log:
+    level: INFO
+    category:
+      "org.ksetl.svm":
+        level: DEBUG
+  hibernate-orm:
+    log:
+      sql: true
+  flyway:
+    migrate-at-start: true
+    locations: db/migration,db/testdata
