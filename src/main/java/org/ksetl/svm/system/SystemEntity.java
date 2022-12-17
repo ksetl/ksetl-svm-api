@@ -38,7 +38,9 @@ public class SystemEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         SystemEntity that = (SystemEntity) o;
+
         if (!Objects.equals(systemId, that.systemId)) return false;
         return Objects.equals(name, that.name);
     }
@@ -52,10 +54,10 @@ public class SystemEntity {
 
     @Override
     public String toString() {
-        return "SystemEntity{" +
+        return "SystemEntity" + '[' +
                 "systemId=" + systemId +
                 ", name='" + name + '\'' +
-                '}';
+                ']';
     }
 
 }
