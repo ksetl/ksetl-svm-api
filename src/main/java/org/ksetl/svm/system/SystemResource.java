@@ -1,5 +1,6 @@
 package org.ksetl.svm.system;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.ksetl.svm.SecurityRoles;
 import org.ksetl.svm.ServiceException;
 
 import java.net.URI;
@@ -39,6 +41,7 @@ public class SystemResource {
                     schema = @Schema(type = SchemaType.ARRAY, implementation = System.class)
             )
     )
+    @RolesAllowed({ SecurityRoles.ROLE_SVM_ADMIN, SecurityRoles.ROLE_SVM_READ })
     public Response get() {
         return Response.ok(systemService.findAll()).build();
     }
@@ -58,6 +61,7 @@ public class SystemResource {
             description = "System does not exist for systemId",
             content = @Content(mediaType = MediaType.APPLICATION_JSON)
     )
+    @RolesAllowed({ SecurityRoles.ROLE_SVM_ADMIN, SecurityRoles.ROLE_SVM_READ })
     public Response getById(@Parameter(name = "systemId", required = true) @PathParam("systemId") Integer systemId) {
         return systemService.findById(systemId)
                 .map(system -> Response.ok(system).build())
@@ -83,6 +87,7 @@ public class SystemResource {
             description = "System already exists for systemId",
             content = @Content(mediaType = MediaType.APPLICATION_JSON)
     )
+    @RolesAllowed({ SecurityRoles.ROLE_SVM_ADMIN, SecurityRoles.ROLE_SVM_WRITE })
     public Response post(@NotNull @Valid System system, @Context UriInfo uriInfo) {
         System saved = systemService.save(system);
         URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(saved.systemId())).build();
@@ -119,6 +124,7 @@ public class SystemResource {
             description = "No System found for systemId provided",
             content = @Content(mediaType = MediaType.APPLICATION_JSON)
     )
+    @RolesAllowed({ SecurityRoles.ROLE_SVM_ADMIN, SecurityRoles.ROLE_SVM_WRITE })
     public Response put(@Parameter(name = "systemId", required = true) @PathParam("systemId") Integer systemId, @NotNull @Valid System system) {
         if (!Objects.equals(systemId, system.systemId())) {
             throw new ServiceException("Path variable systemId does not match System.systemId");
