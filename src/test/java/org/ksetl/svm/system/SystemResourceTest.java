@@ -1,10 +1,13 @@
 package org.ksetl.svm.system;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.ksetl.svm.ErrorResponse;
+import org.ksetl.svm.SecurityRoles;
 import org.ksetl.svm.TestData;
 
 import java.util.List;
@@ -16,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SystemResourceTest {
 
     @Test
+    @TestSecurity(user = TestData.USER_READER, roles = {SecurityRoles.ROLE_SVM_READ})
     public void getAll() {
         List<System> systems = List.of(given()
                 .when()
@@ -32,6 +36,17 @@ public class SystemResourceTest {
     }
 
     @Test
+    @TestSecurity(user = TestData.USER_READER, roles = {SecurityRoles.ROLE_SVM_WRITE})
+    public void getAllSecurityFail() {
+        given()
+                .when()
+                .get("/systems")
+                .then()
+                .statusCode(HttpStatus.SC_FORBIDDEN);
+    }
+
+    @Test
+    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE, SecurityRoles.ROLE_SVM_READ})
     public void postAndGetById() {
         System system = createSystem();
         System saved = given()
@@ -51,6 +66,7 @@ public class SystemResourceTest {
     }
 
     @Test
+    @TestSecurity(user = TestData.USER_READER, roles = {SecurityRoles.ROLE_SVM_READ})
     public void getByIdNotFound() {
         given()
                 .when()
@@ -60,6 +76,7 @@ public class SystemResourceTest {
     }
 
     @Test
+    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE})
     public void postFailNoName() {
         System system = new System(null, null);
         ErrorResponse errorResponse = given()
@@ -76,6 +93,7 @@ public class SystemResourceTest {
     }
 
     @Test
+    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE, SecurityRoles.ROLE_SVM_READ})
     public void put() {
         System system = createSystem();
         System saved = given()
@@ -102,6 +120,13 @@ public class SystemResourceTest {
     }
 
     @Test
+    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_ADMIN})
+    public void putForAdmin() {
+        put();
+    }
+
+    @Test
+    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE})
     public void putFailNoName() {
         System system = createSystem();
         System saved = given()
