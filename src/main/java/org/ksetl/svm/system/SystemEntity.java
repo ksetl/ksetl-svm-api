@@ -14,7 +14,7 @@ public class SystemEntity {
     @Column(name = "system_id")
     private Integer systemId;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     @NotEmpty
     private String name;
 

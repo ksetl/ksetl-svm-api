@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SystemResourceTest {
 
     @Test
-    @TestSecurity(user = TestData.USER_READER, roles = {SecurityRoles.ROLE_SVM_READ})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_READ})
     public void getAll() {
         List<System> systems = List.of(given()
                 .when()
@@ -36,7 +36,7 @@ public class SystemResourceTest {
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_READER, roles = {SecurityRoles.ROLE_SVM_WRITE})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_WRITE})
     public void getAllSecurityFail() {
         given()
                 .when()
@@ -46,7 +46,7 @@ public class SystemResourceTest {
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE, SecurityRoles.ROLE_SVM_READ})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_READ, SecurityRoles.ROLE_SVM_SYSTEM_WRITE})
     public void postAndGetById() {
         System system = createSystem();
         System saved = given()
@@ -66,7 +66,7 @@ public class SystemResourceTest {
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_READER, roles = {SecurityRoles.ROLE_SVM_READ})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_READ})
     public void getByIdNotFound() {
         given()
                 .when()
@@ -76,7 +76,7 @@ public class SystemResourceTest {
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_WRITE})
     public void postFailNoName() {
         System system = new System(null, null);
         ErrorResponse errorResponse = given()
@@ -93,7 +93,7 @@ public class SystemResourceTest {
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE, SecurityRoles.ROLE_SVM_READ})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_WRITE, SecurityRoles.ROLE_SVM_SYSTEM_READ})
     public void put() {
         System system = createSystem();
         System saved = given()
@@ -120,13 +120,13 @@ public class SystemResourceTest {
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_ADMIN})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_ADMIN})
     public void putForAdmin() {
         put();
     }
 
     @Test
-    @TestSecurity(user = TestData.USER_WRITER, roles = {SecurityRoles.ROLE_SVM_WRITE})
+    @TestSecurity(user = TestData.TEST_USER, roles = {SecurityRoles.ROLE_SVM_SYSTEM_WRITE})
     public void putFailNoName() {
         System system = createSystem();
         System saved = given()
