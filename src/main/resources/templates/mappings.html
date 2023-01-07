@@ -1,0 +1,12 @@
+{#include base}
+    <h1>Mappings</h1>
+    {#when mappings.size}
+        {#is 0}
+        There are no mappings created.
+        {#else}
+            {#for mapping in mappings}
+                <h2>{mapping.sourceSystem.name ?: 'Unknown'}</h2>
+            {/for}
+    {/when}
+    </body>
+{/include}

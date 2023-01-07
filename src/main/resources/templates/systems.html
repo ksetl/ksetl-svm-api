@@ -1,0 +1,12 @@
+{#include base}
+    <h1>Systems</h1>
+    {#when systems.size}
+        {#is 0}
+        There are no systems created.
+        {#else}
+            {#for system in systems}
+                <h2>{system.name ?: 'Unknown'}</h2>
+            {/for}
+    {/when}
+    </body>
+{/include}
